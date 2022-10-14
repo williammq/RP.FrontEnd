@@ -9,7 +9,7 @@ const Index = () => {
     return(
         <>
            <h2 className="mt-3">¡Bienvenido!</h2>
-           <p>¡Próximamente nuevas novedades! Por ahora empecemos con <Link to="/permissions">Permisos</Link>.</p>
+           <p>¡Próximamente nuevas novedades! Por ahora empecemos con <Link to="/product">Productos</Link>.</p>
         </>
     );
 }

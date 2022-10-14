@@ -14,9 +14,9 @@ const SideBar = () => {
         </li>
         <hr className="solid"/>
         <li>
-          <NavLink to="/permissions" exact className="text-dark round py-3 w-100 d-inline-block px-4" activeClassName="active">
+          <NavLink to="/product" exact className="text-dark round py-3 w-100 d-inline-block px-4" activeClassName="active">
             <FaIcons.FaLock className="me-2" />
-            Permisos
+            Productos
           </NavLink>
         </li>
         <hr className="solid"/>
@@ -28,13 +28,13 @@ const SideBar = () => {
         </li>
         <hr className="solid"/>
         <li>
-          <a href="https://github.com/ricardoalonne" target="_blank" className="text-dark round py-3 w-100 d-inline-block px-4" rel="noreferrer">
+          <a href="https://github.com/williammq" target="_blank" className="text-dark round py-3 w-100 d-inline-block px-4" rel="noreferrer">
             <FaIcons.FaGithub className="me-2" />
             GitHub
           </a>
         </li>
         <li>
-          <a href="https://www.linkedin.com/in/ricardoalonne/" target="_blank" className="text-dark round py-3 w-100 d-inline-block px-4" rel="noreferrer">
+          <a href="https://www.linkedin.com/in/william-felipe-martel-quiroz-2765b5202/" target="_blank" className="text-dark round py-3 w-100 d-inline-block px-4" rel="noreferrer">
             <FaIcons.FaLinkedin className="me-2" />
             LinkedIn
           </a>

@@ -1,25 +1,92 @@
 import { Link } from "react-router-dom";
-import { Breadcrumb, BreadcrumbItem, Table } from "reactstrap";
+import { Breadcrumb, BreadcrumbItem} from "reactstrap";
 import * as FaIcons from "react-icons/fa";
 import { useEffect, useState } from "react";
 import * as PermissionApi from "./consumeApi/PermissionApi";
-import { PermissionResponse } from "../../models/permission.model";
+
+import { productList } from "../../models/product";
+import axios from 'axios';
+import { Table ,Button,Input,InputNumber,Row, Col } from 'antd';
+import 'antd/dist/antd.css';
+import { number } from "yup/lib/locale";
+
+
+
+
 
 const Index = () => {
-  const [permissions, setPermissions] = useState<PermissionResponse[]>();
+ 
   localStorage.setItem("currentUrl", window.location.href)
 
+  const [product,setProduct] = useState<Array<productList>>();
   useEffect(() => {
-    const getPermission = async () => {
-      setPermissions(await PermissionApi.get());
-    };
-    getPermission();
+    
+    const getAll= async()=>{
+     setProduct(await PermissionApi.getAll());
+     console.log(product);
+    }
+    //getPermission();
+    getAll();
   }, []);
+
+
+
+  const [data,setData] = useState();
+  const [prices,setprices] = useState({
+    priceMin:0,
+    priceMax:0
+  });
+
+  const handleChange=(evt: React.ChangeEvent<HTMLInputElement>)=>{
+  
+    setprices({...prices,
+      [evt.target.name]:evt.target.value
+    }
+    )
+  }
+    const updateTable = () =>{
+      const newArr=product?.filter( p=>  p.price< prices.priceMax);
+      const Arr=newArr?.filter(p=> p.price> prices.priceMin );
+      setProduct(Arr);
+    }
+
+
+
+   const columns=[
+    {
+      title:'Codigo',
+      dataIndex:'codeIntregration',
+      key:'codeIntregration',
+      
+    },{
+      title:'Producto',
+      dataIndex:'productName',
+      key:'productName'
+    },
+    {
+      title:' Marca',
+      dataIndex:'brand.nombre',
+      key:'brand.nombre'
+    },
+    {
+      title:'Precio',
+      dataIndex:'price',
+      key:'price'
+    },
+    {
+      title:'Descripción',
+      dataIndex:'description',
+      key:'description'
+    }];;
+  
+   
+
+
 
   return (
     <>
       <div className="d-flex justify-content-between align-content-normal mt-3">
-        <h1>Permisos</h1>
+        <h1>Productos</h1>
         <Breadcrumb className="mt-3">
           <BreadcrumbItem>
             <Link to="/">Home</Link>
@@ -29,52 +96,32 @@ const Index = () => {
           </BreadcrumbItem>
         </Breadcrumb>
       </div>
-      <div className="d-flex flex-wrap align-items-flex-start mb-2 bg-white p-2 round-3">
-        <Link
-          to="/permissions/request"
-          className="btn btn-primary rounded-pill"
-        >
-          <span className="btn-label">
-            <FaIcons.FaPlusCircle className="me-2" />
-            Solicitar Permiso
-          </span>
-        </Link>
-      </div>
-      <Table bordered responsive size="">
-        <thead>
-          <tr>
-            <th>Nombre de Empleado</th>
-            <th>Apellido de Empleado</th>
-            <th>Tipo de Permiso</th>
-            <th>Día de Permiso</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {permissions?.map((permission) => (
-            <tr key={permission.id}>
-              <td>{permission.employeeName}</td>
-              <td>{permission.employeeLastName}</td>
-              <td>{permission.permissionType.description}</td>
-              <td>{permission.permitDate.toString().replace("T", " ")}</td>
-              <td>
-                <Link
-                  to={`/permissions/detail/${permission.id}`}
-                  className="btn btn-primary btn-action"
-                >
-                  <FaIcons.FaEye />
-                </Link>
-                <Link
-                  to={`/permissions/edit/${permission.id}`}
-                  className="btn btn-primary btn-action"
-                >
-                  <FaIcons.FaPen />
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <br/> 
+      <div><h4>Escriba el rango de precios</h4></div>
+     
+     
+
+     
+      <div className="site-input-group-wrapper">
+      <Input.Group size="large">
+        <Row gutter={12}>
+          <Col span={5}>
+          <Input name="priceMin" type={'number'} placeholder="Rango menor" onChange={handleChange}/>
+          </Col>
+          <Col span={5}>
+          <Input name="priceMax" type={'number'} placeholder="Rango menor"  onChange={handleChange}/>
+          </Col>
+          <Col span={5}>
+          <Button type="primary" onClick={updateTable} >Primary Button</Button>
+          </Col>
+        </Row>
+      </Input.Group>
+     </div>
+      <br/> 
+      <br/>
+      <Table columns={columns} dataSource={product}/>
+      
+      
     </>
   );
 };
